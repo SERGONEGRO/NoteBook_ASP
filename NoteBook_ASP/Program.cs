@@ -1,7 +1,7 @@
 using NoteBook_ASP.Models;
 using System.Text.RegularExpressions;
 
-// начальные данные
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 List<Person> persons = new()
 {
     new() { Id = Guid.NewGuid().ToString(), Name = "Tom1", SurName = "Waits1", LastName = "Ivanich1", PhoneNumber = "111", Address = "adr1", Description = "descr1"},
@@ -17,7 +17,7 @@ app.Run(async (context) =>
     var response = context.Response;
     var request = context.Request;
     var path = request.Path;
-    //string expressionForNumber = "^/api/users/([0 - 9]+)$";   // если id представляет число
+    //string expressionForNumber = "^/api/users/([0 - 9]+)$";   // пїЅпїЅпїЅпїЅ id пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 
     // 2e752824-1657-4c7f-844b-6ec2e168e99c
     string expressionForGuid = @"^/api/users/\w{8}-\w{4}-\w{4}-\w{4}-\w{12}$";
@@ -27,7 +27,7 @@ app.Run(async (context) =>
     }
     else if (Regex.IsMatch(path, expressionForGuid) && request.Method == "GET")
     {
-        // получаем id из адреса url
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ id пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ url
         string? id = path.Value?.Split("/")[3];
         await GetPerson(id, response, request);
     }
@@ -53,42 +53,42 @@ app.Run(async (context) =>
 
 app.Run();
 
-// получение всех пользователей
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 async Task GetAllPeople(HttpResponse response)
 {
     await response.WriteAsJsonAsync(persons);
 }
-// получение одного пользователя по id
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ id
 async Task GetPerson(string? id, HttpResponse response, HttpRequest request)
 {
-    // получаем пользователя по id
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ id
     Person? person = persons.FirstOrDefault((u) => u.Id == id);
-    // если пользователь найден, отправляем его
+    // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
     if (person != null)
         await response.WriteAsJsonAsync(person);
-    // если не найден, отправляем статусный код и сообщение об ошибке
+    // пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
     else
     {
         response.StatusCode = 404;
-        await response.WriteAsJsonAsync(new { message = "Пользователь не найден" });
+        await response.WriteAsJsonAsync(new { message = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ" });
     }
 }
 
 async Task DeletePerson(string? id, HttpResponse response, HttpRequest request)
 {
-    // получаем пользователя по id
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ id
     Person? person = persons.FirstOrDefault((u) => u.Id == id);
-    // если пользователь найден, удаляем его
+    // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
     if (person != null)
     {
         persons.Remove(person);
         await response.WriteAsJsonAsync(person);
     }
-    // если не найден, отправляем статусный код и сообщение об ошибке
+    // пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
     else
     {
         response.StatusCode = 404;
-        await response.WriteAsJsonAsync(new { message = "Пользователь не найден" });
+        await response.WriteAsJsonAsync(new { message = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ" });
     }
 }
 
@@ -96,25 +96,25 @@ async Task CreatePerson(HttpResponse response, HttpRequest request)
 {
     try
     {
-        // получаем данные пользователя
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         var person = await request.ReadFromJsonAsync<Person>();
         if (person != null)
         {
-            // устанавливаем id для нового пользователя
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ id пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             person.Id = Guid.NewGuid().ToString();
-            // добавляем пользователя в список
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
             persons.Add(person);
             await response.WriteAsJsonAsync(person);
         }
         else
         {
-            throw new Exception("Некорректные данные");
+            throw new Exception("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ");
         }
     }
     catch (Exception)
     {
         response.StatusCode = 400;
-        await response.WriteAsJsonAsync(new { message = "Некорректные данные" });
+        await response.WriteAsJsonAsync(new { message = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ" });
     }
 }
 
@@ -122,13 +122,13 @@ async Task UpdatePerson(HttpResponse response, HttpRequest request)
 {
     try
     {
-        // получаем данные пользователя
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         Person? personData = await request.ReadFromJsonAsync<Person>();
         if (personData != null)
         {
-            // получаем пользователя по id
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ id
             var person = persons.FirstOrDefault(u => u.Id == personData.Id);
-            // если пользователь найден, изменяем его данные и отправляем обратно клиенту
+            // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             if (person != null)
             {
                 person.Name = personData.Name;
@@ -142,17 +142,17 @@ async Task UpdatePerson(HttpResponse response, HttpRequest request)
             else
             {
                 response.StatusCode = 404;
-                await response.WriteAsJsonAsync(new { message = "Пользователь не найден" });
+                await response.WriteAsJsonAsync(new { message = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ" });
             }
         }
         else
         {
-            throw new Exception("Некорректные данные");
+            throw new Exception("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ");
         }
     }
     catch (Exception)
     {
         response.StatusCode = 400;
-        await response.WriteAsJsonAsync(new { message = "Некорректные данные" });
+        await response.WriteAsJsonAsync(new { message = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ" });
     }
 }
