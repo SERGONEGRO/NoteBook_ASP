@@ -37,7 +37,7 @@
                 <input class="form-control" name="description" />
             </div>
             <div class="mb-3">
-                <button type="submit" class="btn btn-sm btn-primary" onclick="window.location.href='https://localhost:7094'">Сохранить</button>
+                <button type="submit" class="btn btn-sm btn-primary">Сохранить</button>
                 <a id="reset" class="btn btn-sm btn-primary">Сбросить</a>
             </div>
         </form>
@@ -47,7 +47,7 @@
         // Добавление пользователя
         async function createUser(userName, userSurName, userLastName, userPhone, userAddress, userDescr) {
             //создаем запрос
-            const response = await fetch("html/person_new.html", {
+            const response = await fetch("person_new.html", {
                 method: "POST",
                 headers: { "Accept": "application/json", "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -60,7 +60,10 @@
                 })
             });
             if (response.ok === true) {
-                console.log("user added")
+                console.log(response.method);
+                console.log(response.fetch);
+                console.log(response.status);
+                console.log(response.headers);
                 //const user = await response.json();
                 //reset();
                /* document.location.href = "http://www.site.ru";*/

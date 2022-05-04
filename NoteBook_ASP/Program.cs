@@ -20,6 +20,8 @@ app.Run(async (context) =>
     var response = context.Response;
     var request = context.Request;
     var path = request.Path;
+    Console.WriteLine(path);
+    Console.WriteLine(request.Method);
     //string expressionForNumber = "^/api/users/([0 - 9]+)$";   // ���� id ������������ �����
 
     // 2e752824-1657-4c7f-844b-6ec2e168e99c
@@ -37,10 +39,13 @@ app.Run(async (context) =>
         Console.WriteLine("запрошена запись с id = {0}", id);
         await GetPerson(id, response, request);
     }
-    else if (path == "/api/users" && request.Method == "POST")
+    else if (path == "/html/person_new.html" && request.Method == "POST")
     {
         Console.WriteLine("запрос CreatePerson");
         await CreatePerson(response, request);
+        Console.WriteLine("переход на страницу по умолчанию");
+        response.ContentType = "text/html; charset=utf-8";   // error here!
+        await response.SendFileAsync("html/index.html");
     }
     else if (path == "/api/users" && request.Method == "PUT")
     {
