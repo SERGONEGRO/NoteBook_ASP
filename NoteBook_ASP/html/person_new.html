@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Записная книжка</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Новая запись</h1>
+        <form name="userForm">
+            <input type="hidden" name="id" value="0" />
+            <div class="mb-3">
+                <label class="form-label" for="name">Имя:</label>
+                <input class="form-control" name="name" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="surName">Фамилия:</label>
+                <input class="form-control" name="surName" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="lastName">Отчество:</label>
+                <input class="form-control" name="lastName" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="phoneNumber">Телефон:</label>
+                <input class="form-control" name="phoneNumber" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="address">Адрес:</label>
+                <input class="form-control" name="address" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="description">Описание:</label>
+                <input class="form-control" name="description" />
+            </div>
+            <div class="mb-3">
+                <button type="submit" class="btn btn-sm btn-primary" onclick="window.location.href='https://localhost:7094'">Сохранить</button>
+                <a id="reset" class="btn btn-sm btn-primary">Сбросить</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Добавление пользователя
+        async function createUser(userName, userSurName, userLastName, userPhone, userAddress, userDescr) {
+            //создаем запрос
+            const response = await fetch("html/person_new.html", {
+                method: "POST",
+                headers: { "Accept": "application/json", "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    name: userName,
+                    surName: userSurName,
+                    lastName: userLastName,
+                    phoneNumber: userPhone,
+                    address: userAddress,
+                    description: userDescr
+                })
+            });
+            if (response.ok === true) {
+                console.log("user added")
+                //const user = await response.json();
+                //reset();
+               /* document.location.href = "http://www.site.ru";*/
+                //window.location.href = "https://localhost:7094/";
+               /* document.querySelector("tbody").append(row(user));*/
+            }
+            else {
+                const error = await response.json();
+                console.log(error.message);
+            }
+        }
+
+        // обработчик событий по клику на "сохранить"
+        document.forms["userForm"].addEventListener("submit", e => {
+            e.preventDefault();
+            const form = document.forms["userForm"];
+            const id = form.elements["id"].value;
+            const name = form.elements["name"].value;
+            const surName = form.elements["surName"].value;
+            const lastName = form.elements["lastName"].value;
+            const phoneNumber = form.elements["phoneNumber"].value;
+            const address = form.elements["address"].value;
+            const description = form.elements["description"].value;
+            if (id == 0)
+                createUser(name, surName, lastName, phoneNumber, address, description);
+            else
+                editUser(id, name, surName, lastName, phoneNumber, address, description);
+        });
+
+    </script>
+
+</body>
+</html>

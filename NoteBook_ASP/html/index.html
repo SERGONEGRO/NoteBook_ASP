@@ -8,9 +8,9 @@
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-    <div class="container">
+    <div class="container" style="background-image:url(../img/img1.jpg) ">
         <h2>Список Контактов</h2>
-        <form name="userForm" class="userForm">
+        <!--<form name="userForm" class="userForm">
             <input type="hidden" name="id" value="0" />
             <div class="userForm__block">
                 <div class="mb-3">
@@ -44,9 +44,8 @@
                     <a id="reset" class="btn btn-sm btn-primary">Сбросить</a>
                 </div>
             </div>
-            
-            
-        </form>
+        </form>-->
+
         <table class="table table-condensed table-striped table-bordered">
             <thead>
                 <tr>
@@ -57,6 +56,7 @@
             <tbody>
             </tbody>
         </table>
+        <a id="add" class="btn btn-sm btn-primary" onclick="window.location.href='html/person_new.html'">Добавить</a>
     </div>
     
 
@@ -100,31 +100,32 @@
                 console.log(error.message); // и выводим его на консоль
             }
         }
-        // Добавление пользователя
-        async function createUser(userName, userSurName, userLastName, userPhone, userAddress, userDescr) {
+        //// Добавление пользователя
+        //async function createUser(userName, userSurName, userLastName, userPhone, userAddress, userDescr) {
 
-            const response = await fetch("api/users", {
-                method: "POST",
-                headers: { "Accept": "application/json", "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    name: userName,
-                    surName: userSurName,
-                    lastName: userLastName,
-                    phoneNumber: userPhone,
-                    address: userAddress,
-                    description: userDescr
-                })
-            });
-            if (response.ok === true) {
-                const user = await response.json();
-                reset();
-                document.querySelector("tbody").append(row(user));
-            }
-            else {
-                const error = await response.json();
-                console.log(error.message);
-            }
-        }
+        //    const response = await fetch("api/users", {
+        //        method: "POST",
+        //        headers: { "Accept": "application/json", "Content-Type": "application/json" },
+        //        body: JSON.stringify({
+        //            name: userName,
+        //            surName: userSurName,
+        //            lastName: userLastName,
+        //            phoneNumber: userPhone,
+        //            address: userAddress,
+        //            description: userDescr
+        //        })
+        //    });
+        //    if (response.ok === true) {
+        //        const user = await response.json();
+        //        reset();
+        //        document.querySelector("tbody").append(row(user));
+        //    }
+        //    else {
+        //        const error = await response.json();
+        //        console.log(error.message);
+        //    }
+        //}
+
         // Изменение пользователя
         async function editUser(userId, userName, userSurName, userLastName, userPhone, userAddress, userDescr) {
             const response = await fetch("api/users", {
@@ -213,28 +214,28 @@
             return tr;
         }
         // сброс значений формы
-        document.getElementById("reset").addEventListener("click", e => {
+        //document.getElementById("reset").addEventListener("click", e => {
 
-            e.preventDefault();
-            reset();
-        })
+        //    e.preventDefault();
+        //    reset();
+        //})
 
-        // отправка формы
-        document.forms["userForm"].addEventListener("submit", e => {
-            e.preventDefault();
-            const form = document.forms["userForm"];
-            const id = form.elements["id"].value;
-            const name = form.elements["name"].value;
-            const surName = form.elements["surName"].value;
-            const lastName = form.elements["lastName"].value;
-            const phoneNumber = form.elements["phoneNumber"].value;
-            const address = form.elements["address"].value;
-            const description = form.elements["description"].value;
-            if (id == 0)
-                createUser(name, surName, lastName, phoneNumber, address, description);
-            else
-                editUser(id, name, surName, lastName, phoneNumber, address, description);
-        });
+        //// отправка формы
+        //document.forms["userForm"].addEventListener("submit", e => {
+        //    e.preventDefault();
+        //    const form = document.forms["userForm"];
+        //    const id = form.elements["id"].value;
+        //    const name = form.elements["name"].value;
+        //    const surName = form.elements["surName"].value;
+        //    const lastName = form.elements["lastName"].value;
+        //    const phoneNumber = form.elements["phoneNumber"].value;
+        //    const address = form.elements["address"].value;
+        //    const description = form.elements["description"].value;
+        //    if (id == 0)
+        //        createUser(name, surName, lastName, phoneNumber, address, description);
+        //    else
+        //        editUser(id, name, surName, lastName, phoneNumber, address, description);
+        //});
 
         // загрузка пользователей
         getUsers();
