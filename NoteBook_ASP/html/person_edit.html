@@ -45,8 +45,8 @@
 
     <script>
         // Получение одного пользователя
-        async function getUser(id) {
-            const response = await fetch("/api/users/" + id, {
+        async function getUser() {
+            const response = await fetch("/api/getuser/" , {
                 method: "GET",
                 headers: { "Accept": "application/json" }
             });
@@ -67,7 +67,58 @@
                 console.log(error.message); // и выводим его на консоль
             }
         }
-        getUser(user.id)
+
+        getUser();
+
+        // сброс значений формы
+        //document.getElementById("reset").addEventListener("click", e => {
+
+        //    e.preventDefault();
+        //    reset();
+        //})
+
+        // отправка формы
+        document.forms["userForm"].addEventListener("submit", e => {
+            e.preventDefault();
+            const form = document.forms["userForm"];
+            const id = form.elements["id"].value;
+            const name = form.elements["name"].value;
+            const surName = form.elements["surName"].value;
+            const lastName = form.elements["lastName"].value;
+            const phoneNumber = form.elements["phoneNumber"].value;
+            const address = form.elements["address"].value;
+            const description = form.elements["description"].value;
+            if (id == 0)
+                createUser(name, surName, lastName, phoneNumber, address, description);
+            else
+                editUser(id, name, surName, lastName, phoneNumber, address, description);
+        });
+
+        // Изменение пользователя
+        async function editUser(userId, userName, userSurName, userLastName, userPhone, userAddress, userDescr) {
+            const response = await fetch("api/users", {
+                method: "PUT",
+                headers: { "Accept": "application/json", "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    id: userId,
+                    name: userName,
+                    surName: userSurName,
+                    lastName: userLastName,
+                    phoneNumber: userPhone,
+                    address: userAddress,
+                    description: userDescr
+                })
+            });
+            if (response.ok === true) {
+                const user = await response.json();
+                reset();
+                document.querySelector("tr[data-rowid='" + user.id + "']").replaceWith(row(user));
+            }
+            else {
+                const error = await response.json();
+                console.log(error.message);
+            }
+        }
     </script>
 
 </body>

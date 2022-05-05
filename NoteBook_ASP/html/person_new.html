@@ -37,7 +37,7 @@
                 <input class="form-control" name="description" />
             </div>
             <div class="mb-3">
-                <button type="submit" class="btn btn-sm btn-primary">Сохранить</button>
+                <button type="submit" class="btn btn-sm btn-primary" onclick="window.location.href='https://localhost:7094'">Сохранить</button>
                 <a id="reset" class="btn btn-sm btn-primary">Сбросить</a>
             </div>
         </form>
@@ -64,11 +64,6 @@
                 console.log(response.fetch);
                 console.log(response.status);
                 console.log(response.headers);
-                //const user = await response.json();
-                //reset();
-               /* document.location.href = "http://www.site.ru";*/
-                //window.location.href = "https://localhost:7094/";
-               /* document.querySelector("tbody").append(row(user));*/
             }
             else {
                 const error = await response.json();

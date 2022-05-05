@@ -14,14 +14,15 @@ Console.WriteLine("БД Создана");
 var builder = WebApplication.CreateBuilder();
 var app = builder.Build();
 
+string? editId = string.Empty;    //переменная для хранения id редактируемой записи
+
 app.Run(async (context) =>
 {
     
     var response = context.Response;
     var request = context.Request;
     var path = request.Path;
-    Console.WriteLine(path);
-    Console.WriteLine(request.Method);
+    Console.WriteLine("[{0}] [{1}]", request.Method,path);
     //string expressionForNumber = "^/api/users/([0 - 9]+)$";   // ���� id ������������ �����
 
     // 2e752824-1657-4c7f-844b-6ec2e168e99c
@@ -31,6 +32,18 @@ app.Run(async (context) =>
     {
         Console.WriteLine("Запрос всех");
         await GetAllPeople(response);
+    }
+    //если запрос на сохранение id
+    else if (Regex.IsMatch(path, expressionForGuid) && request.Method == "POST")
+    {
+        editId = path.Value?.Split("/")[3];
+        Console.WriteLine("запрошено сохранение id = {0}", editId);
+    }
+    //если запрос на получения пользователя, отправленного на редактирование
+    if (path == "/api/getuser" && request.Method == "GET")
+    {
+        Console.WriteLine("запрошена запись с id = {0}", editId);
+        await GetPerson(editId, response, request);
     }
     else if (Regex.IsMatch(path, expressionForGuid) && request.Method == "GET")
     {
@@ -44,10 +57,10 @@ app.Run(async (context) =>
         Console.WriteLine("запрос CreatePerson");
         await CreatePerson(response, request);
         Console.WriteLine("переход на страницу по умолчанию");
-        response.ContentType = "text/html; charset=utf-8";   // error here!
+        //response.ContentType = "text/html; charset=utf-8";   // error here!
         await response.SendFileAsync("html/index.html");
     }
-    else if (path == "/api/users" && request.Method == "PUT")
+    else if (path == "/html/person_edit.html" && request.Method == "PUT")
     {
         Console.WriteLine("запрос UpdatePerson");
         await UpdatePerson(response, request);
@@ -64,6 +77,13 @@ app.Run(async (context) =>
         Console.WriteLine("запрос открытия пустого окна для создания новой записи");
         response.ContentType = "text/html; charset=utf-8";
         await response.SendFileAsync("html/person_new.html");
+    }
+    //открытие пустой страницы для редактирования
+    else if (path == "/html/person_edit.html")
+    {
+        Console.WriteLine("запрос открытия пустого окна для редактирования записи");
+        response.ContentType = "text/html; charset=utf-8";
+        await response.SendFileAsync("html/person_edit.html");
     }
     else
     {
@@ -128,13 +148,9 @@ async Task CreatePerson(HttpResponse response, HttpRequest request)
         {
             // ������������� id ��� ������ ������������
             person.Id = Guid.NewGuid().ToString();
-            Console.WriteLine(person.Id);
-            Console.WriteLine(person.FullName);
+            Console.WriteLine("Создана запись {0} с id = {1}",person.FullName, person.Id);
             // ��������� ������������ � ������
             persons.Add(person);
-            //отсылаем на первоначальную страницу
-            await response.SendFileAsync("html/index.html");
-            //await response.WriteAsJsonAsync(person);
         }
         else
         {

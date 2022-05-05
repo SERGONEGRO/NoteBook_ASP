@@ -8,44 +8,8 @@
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-    <div class="container" style="background-image:url(../img/img1.jpg) ">
+    <div class="container">
         <h2>Список Контактов</h2>
-        <!--<form name="userForm" class="userForm">
-            <input type="hidden" name="id" value="0" />
-            <div class="userForm__block">
-                <div class="mb-3">
-                    <label class="form-label" for="name">Имя:</label>
-                    <input class="form-control" name="name" />
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="surName">Фамилия:</label>
-                    <input class="form-control" name="surName" />
-                </div>
-                <div class="mb-3">
-                    <label for="lastName" class="form-label">Отчество:</label>
-                    <input class="form-control" name="lastName" />
-                </div>
-            </div>
-            <div class="userForm__block">
-                <div class="mb-3">
-                    <label for="phoneNumber" class="form-label">Телефон:</label>
-                    <input class="form-control" name="phoneNumber" />
-                </div>
-                <div class="mb-3">
-                    <label for="address" class="form-label">Адрес:</label>
-                    <input class="form-control" name="address" />
-                </div>
-                <div class="mb-3">
-                    <label for="description" class="form-label">Описание:</label>
-                    <input class="form-control" name="description" />
-                </div>
-                <div class="mb-3">
-                    <button type="submit" class="btn btn-sm btn-primary">Сохранить</button>
-                    <a id="reset" class="btn btn-sm btn-primary">Сбросить</a>
-                </div>
-            </div>
-        </form>-->
-
         <table class="table table-condensed table-striped table-bordered">
             <thead>
                 <tr>
@@ -78,21 +42,37 @@
             }
         }
         // Получение одного пользователя
-        async function getUser(id) {
+        //async function getUser(id) {
+        //    const response = await fetch("/api/users/" + id, {
+        //        method: "GET",
+        //        headers: { "Accept": "application/json" }
+        //    });
+        //    if (response.ok === true) {
+        //        const user = await response.json();
+        //        const form = document.forms["userForm"];
+        //        form.elements["id"].value = user.id;
+        //        form.elements["name"].value = user.name;
+        //        form.elements["surName"].value = user.surName;
+        //        form.elements["lastName"].value = user.lastName;
+        //        form.elements["phoneNumber"].value = user.phoneNumber;
+        //        form.elements["address"].value = user.address;
+        //        form.elements["description"].value = user.description;
+        //    }
+        //    else {
+        //        // если произошла ошибка, получаем сообщение об ошибке
+        //        const error = await response.json();
+        //        console.log(error.message); // и выводим его на консоль
+        //    }
+        //}
+
+        //отрпавка ID на сервер для дальнейшего вызова в окне редактирования
+        async function sendUserId(id) {
             const response = await fetch("/api/users/" + id, {
-                method: "GET",
+                method: "POST",
                 headers: { "Accept": "application/json" }
             });
             if (response.ok === true) {
-                const user = await response.json();
-                const form = document.forms["userForm"];
-                form.elements["id"].value = user.id;
-                form.elements["name"].value = user.name;
-                form.elements["surName"].value = user.surName;
-                form.elements["lastName"].value = user.lastName;
-                form.elements["phoneNumber"].value = user.phoneNumber;
-                form.elements["address"].value = user.address;
-                form.elements["description"].value = user.description;
+                console.log("id отправлен на сервер");
             }
             else {
                 // если произошла ошибка, получаем сообщение об ошибке
@@ -100,57 +80,8 @@
                 console.log(error.message); // и выводим его на консоль
             }
         }
-        //// Добавление пользователя
-        //async function createUser(userName, userSurName, userLastName, userPhone, userAddress, userDescr) {
-
-        //    const response = await fetch("api/users", {
-        //        method: "POST",
-        //        headers: { "Accept": "application/json", "Content-Type": "application/json" },
-        //        body: JSON.stringify({
-        //            name: userName,
-        //            surName: userSurName,
-        //            lastName: userLastName,
-        //            phoneNumber: userPhone,
-        //            address: userAddress,
-        //            description: userDescr
-        //        })
-        //    });
-        //    if (response.ok === true) {
-        //        const user = await response.json();
-        //        reset();
-        //        document.querySelector("tbody").append(row(user));
-        //    }
-        //    else {
-        //        const error = await response.json();
-        //        console.log(error.message);
-        //    }
-        //}
-
-        // Изменение пользователя
-        async function editUser(userId, userName, userSurName, userLastName, userPhone, userAddress, userDescr) {
-            const response = await fetch("api/users", {
-                method: "PUT",
-                headers: { "Accept": "application/json", "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    id: userId,
-                    name: userName,
-                    surName: userSurName,
-                    lastName: userLastName,
-                    phoneNumber: userPhone,
-                    address: userAddress,
-                    description: userDescr
-                })
-            });
-            if (response.ok === true) {
-                const user = await response.json();
-                reset();
-                document.querySelector("tr[data-rowid='" + user.id + "']").replaceWith(row(user));
-            }
-            else {
-                const error = await response.json();
-                console.log(error.message);
-            }
-        }
+       
+        
         // Удаление пользователя
         async function deleteUser(id) {
             const response = await fetch("/api/users/" + id, {
@@ -167,12 +98,13 @@
             }
         }
 
-        // сброс данных формы после отправки
-        function reset() {
-            const form = document.forms["userForm"];
-            form.reset();
-            form.elements["id"].value = 0;
-        }
+        //// сброс данных формы после отправки
+        //function reset() {
+        //    const form = document.forms["userForm"];
+        //    form.reset();
+        //    form.elements["id"].value = 0;
+        //}
+
         // создание строки для таблицы
         function row(user) {
 
@@ -191,11 +123,13 @@
 
             const editLink = document.createElement("a");
             editLink.setAttribute("style", "cursor:pointer;padding:15px;");
+            editLink.setAttribute("onclick", "window.location.href='html/person_edit.html'");
             editLink.append("Изменить");
             editLink.addEventListener("click", e => {
 
                 e.preventDefault();
-                getUser(user.id);
+                /* getUser(user.id);*/
+                sendUserId(user.id);
             });
             linksTd.append(editLink);
 
