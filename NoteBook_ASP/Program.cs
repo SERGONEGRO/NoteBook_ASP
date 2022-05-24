@@ -22,7 +22,8 @@ app.Run(async (context) =>
     var response = context.Response;
     var request = context.Request;
     var path = request.Path;
-    Console.WriteLine("[{0}] [{1}]", request.Method,path);
+    PrintResponseInfo(response);
+    Console.WriteLine($"\nrequest path = {1}", path.ToString() );
     //string expressionForNumber = "^/api/users/([0 - 9]+)$";   // ���� id ������������ �����
 
     // 2e752824-1657-4c7f-844b-6ec2e168e99c
@@ -57,7 +58,7 @@ app.Run(async (context) =>
         Console.WriteLine("запрос CreatePerson");
         await CreatePerson(response, request);
         Console.WriteLine("переход на страницу по умолчанию");
-        //response.ContentType = "text/html; charset=utf-8";   // error here!
+        response.ContentType = "text/html; charset=utf-8";   // error here!
         await response.SendFileAsync("html/index.html");
     }
     else if (path == "/html/person_edit.html" && request.Method == "PUT")
@@ -87,19 +88,33 @@ app.Run(async (context) =>
     }
     else
     {
-        Console.WriteLine("запрос страницы по умолчанию");
+        await PrintResponseInfo(response);
         response.ContentType = "text/html; charset=utf-8";
+        await PrintResponseInfo(response);
         await response.SendFileAsync("html/index.html");
     }
 });
 
 app.Run();
 
+async Task PrintResponseInfo(HttpResponse response)
+{
+    Console.WriteLine(@"HasStarted={0}\t" +
+                      //$"ContentType={1}\t" +
+                      @"StatusCode={1} " +
+                      @"Body={2}",
+                      response.HasStarted.ToString(),
+                      //response.ContentType.ToString(),
+                      response.StatusCode.ToString(),
+                      response.Body.ToString());
+}
 // ��������� ���� �������������
 async Task GetAllPeople(HttpResponse response)
 {
-    Console.WriteLine("выполнение GetAllPeople");
+    await PrintResponseInfo(response);
     await response.WriteAsJsonAsync(persons);
+    await PrintResponseInfo(response);
+    Console.WriteLine("выполнено GetAllPeople");
 }
 // ��������� ������ ������������ �� id
 async Task GetPerson(string? id, HttpResponse response, HttpRequest request)
