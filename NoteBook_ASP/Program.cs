@@ -23,7 +23,7 @@ app.Run(async (context) =>
     var request = context.Request;
     var path = request.Path;
     PrintResponseInfo(response);
-    Console.WriteLine($"\nrequest path = {1}", path.ToString() );
+    Console.WriteLine(@"request path = {0}", path.ToString() );
     //string expressionForNumber = "^/api/users/([0 - 9]+)$";   // ���� id ������������ �����
 
     // 2e752824-1657-4c7f-844b-6ec2e168e99c
@@ -88,10 +88,21 @@ app.Run(async (context) =>
     }
     else
     {
-        await PrintResponseInfo(response);
-        response.ContentType = "text/html; charset=utf-8";
-        await PrintResponseInfo(response);
-        await response.SendFileAsync("html/index.html");
+        try
+        {
+            await PrintResponseInfo(response);
+            response.ContentType = "text/html; charset=utf-8";
+            await PrintResponseInfo(response);
+            await response.SendFileAsync("html/index.html");
+
+        }
+        catch (Exception ex)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(@"Ошибка в ответе №{0}", response.GetHashCode().ToString());
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+        
     }
 });
 
@@ -99,14 +110,14 @@ app.Run();
 
 async Task PrintResponseInfo(HttpResponse response)
 {
-    Console.WriteLine(@"HasStarted={0}\t" +
+    Console.WriteLine(@"HasStarted={0} " +
                       //$"ContentType={1}\t" +
                       @"StatusCode={1} " +
-                      @"Body={2}",
+                      @"HashCode={2}",
                       response.HasStarted.ToString(),
                       //response.ContentType.ToString(),
                       response.StatusCode.ToString(),
-                      response.Body.ToString());
+                      response.GetHashCode().ToString());
 }
 // ��������� ���� �������������
 async Task GetAllPeople(HttpResponse response)
