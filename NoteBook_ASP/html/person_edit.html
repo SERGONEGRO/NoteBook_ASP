@@ -37,7 +37,7 @@
                 <input class="form-control" name="description" />
             </div>
             <div class="mb-3">
-                <button type="submit" class="btn btn-sm btn-primary">Сохранить</button>
+                <button type="submit" class="btn btn-sm btn-primary" onclick="window.location.href='/index.html'">Сохранить</button>
                 <a id="reset" class="btn btn-sm btn-primary">Сбросить</a>
             </div>
         </form>
@@ -46,7 +46,7 @@
     <script>
         // Получение одного пользователя
         async function getUser() {
-            const response = await fetch("/api/getuser/" , {
+            const response = await fetch("/api/getuser" , {
                 method: "GET",
                 headers: { "Accept": "application/json" }
             });
@@ -70,15 +70,9 @@
 
         getUser();
 
-        // сброс значений формы
-        //document.getElementById("reset").addEventListener("click", e => {
-
-        //    e.preventDefault();
-        //    reset();
-        //})
-
         // отправка формы
         document.forms["userForm"].addEventListener("submit", e => {
+            console.log("нажата клавиша сохранить")
             e.preventDefault();
             const form = document.forms["userForm"];
             const id = form.elements["id"].value;
@@ -96,7 +90,7 @@
 
         // Изменение пользователя
         async function editUser(userId, userName, userSurName, userLastName, userPhone, userAddress, userDescr) {
-            const response = await fetch("api/users", {
+            const response = await fetch("/api/users", {
                 method: "PUT",
                 headers: { "Accept": "application/json", "Content-Type": "application/json" },
                 body: JSON.stringify({

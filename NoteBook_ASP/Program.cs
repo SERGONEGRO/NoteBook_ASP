@@ -2,7 +2,10 @@ using NoteBook_ASP.Models;
 using System.Text.RegularExpressions;
 
 Console.WriteLine("сервер запущен");
-// ��������� ������
+
+/// <summary>
+/// Create DB
+/// </summary>
 List<Person> persons = new()
 {
     new() { Id = Guid.NewGuid().ToString(), Name = "Tom1", SurName = "Waits1", LastName = "Ivanich1", PhoneNumber = "111", Address = "adr1", Description = "descr1"},
@@ -16,25 +19,29 @@ var app = builder.Build();
 
 string? editId = string.Empty;    //переменная для хранения id редактируемой записи
 
+
+/// <summary>
+/// start app
+/// </summary>
 app.Run(async (context) =>
 {
     
     var response = context.Response;
     var request = context.Request;
     var path = request.Path;
-    PrintResponseInfo(response);
+    PrintResponseInfo(response, request);
     Console.WriteLine(@"request path = {0}", path.ToString() );
-    //string expressionForNumber = "^/api/users/([0 - 9]+)$";   // ���� id ������������ �����
-
-    // 2e752824-1657-4c7f-844b-6ec2e168e99c
+ 
+    //вычисление id
     string expressionForGuid = @"^/api/users/\w{8}-\w{4}-\w{4}-\w{4}-\w{12}$";
 
+    //default main page
     if (path == "/api/users" && request.Method == "GET")
     {
         Console.WriteLine("Запрос всех");
-        await GetAllPeople(response);
+        await GetAllPeople(response, request);
     }
-    //если запрос на сохранение id
+    //если запрос на сохранение id - пока не знаю как по-другому сделать
     else if (Regex.IsMatch(path, expressionForGuid) && request.Method == "POST")
     {
         editId = path.Value?.Split("/")[3];
@@ -43,17 +50,12 @@ app.Run(async (context) =>
     //если запрос на получения пользователя, отправленного на редактирование
     if (path == "/api/getuser" && request.Method == "GET")
     {
-        Console.WriteLine("запрошена запись с id = {0}", editId);
+        Console.WriteLine("запрошена запись с id = {0} для редактирования", editId);
         await GetPerson(editId, response, request);
     }
-    else if (Regex.IsMatch(path, expressionForGuid) && request.Method == "GET")
-    {
-        // �������� id �� ������ url
-        string? id = path.Value?.Split("/")[3];
-        Console.WriteLine("запрошена запись с id = {0}", id);
-        await GetPerson(id, response, request);
-    }
-    else if (path == "/html/person_new.html" && request.Method == "POST")
+
+    //Если пришел запрос на сохранение нового пользователя
+    else if (path == "/person_new.html" && request.Method == "POST")
     {
         Console.WriteLine("запрос CreatePerson");
         await CreatePerson(response, request);
@@ -61,38 +63,46 @@ app.Run(async (context) =>
         response.ContentType = "text/html; charset=utf-8";   // error here!
         await response.SendFileAsync("html/index.html");
     }
-    else if (path == "/html/person_edit.html" && request.Method == "PUT")
+
+    //Если пришел запрос на обновление данных пользователя
+    else if (path == "/api/users" && request.Method == "PUT")
     {
         Console.WriteLine("запрос UpdatePerson");
         await UpdatePerson(response, request);
     }
+
+    //Если пришел запрос на удаление пользователя
     else if (Regex.IsMatch(path, expressionForGuid) && request.Method == "DELETE")
     {
         Console.WriteLine("запрос DeletePerson");
         string? id = path.Value?.Split("/")[3];
         await DeletePerson(id, response, request);
     }
+
     //открытие пустой страницы для создания
-    else if (path == "/html/person_new.html")
+    else if (path == "/person_new.html")
     {
         Console.WriteLine("запрос открытия пустого окна для создания новой записи");
         response.ContentType = "text/html; charset=utf-8";
         await response.SendFileAsync("html/person_new.html");
     }
+
     //открытие пустой страницы для редактирования
-    else if (path == "/html/person_edit.html")
+    else if (path == "/person_edit.html")
     {
         Console.WriteLine("запрос открытия пустого окна для редактирования записи");
         response.ContentType = "text/html; charset=utf-8";
         await response.SendFileAsync("html/person_edit.html");
     }
+
+    //В других случаях открывается главная страница
     else
     {
         try
         {
-            await PrintResponseInfo(response);
+            await PrintResponseInfo(response, request);
             response.ContentType = "text/html; charset=utf-8";
-            await PrintResponseInfo(response);
+            await PrintResponseInfo(response, request);
             await response.SendFileAsync("html/index.html");
 
         }
@@ -108,26 +118,39 @@ app.Run(async (context) =>
 
 app.Run();
 
-async Task PrintResponseInfo(HttpResponse response)
+/// <summary>
+/// Print info
+/// </summary>
+async Task PrintResponseInfo(HttpResponse response,HttpRequest request)
 {
     Console.WriteLine(@"HasStarted={0} " +
                       //$"ContentType={1}\t" +
                       @"StatusCode={1} " +
-                      @"HashCode={2}",
+                      @"HashCode={2} " +
+                      @"requestPAth={3} " +
+                      @"requestMethod={4}",
                       response.HasStarted.ToString(),
                       //response.ContentType.ToString(),
                       response.StatusCode.ToString(),
-                      response.GetHashCode().ToString());
+                      response.GetHashCode().ToString(),
+                      request.Path.ToString(),
+                      request.Method.ToString());    
 }
-// ��������� ���� �������������
-async Task GetAllPeople(HttpResponse response)
+
+/// <summary>
+/// get all clients
+/// </summary>
+async Task GetAllPeople(HttpResponse response,HttpRequest request)
 {
-    await PrintResponseInfo(response);
+    await PrintResponseInfo(response, request);
     await response.WriteAsJsonAsync(persons);
-    await PrintResponseInfo(response);
+    await PrintResponseInfo(response, request);
     Console.WriteLine("выполнено GetAllPeople");
 }
-// ��������� ������ ������������ �� id
+
+/// <summary>
+/// get current client
+/// </summary>
 async Task GetPerson(string? id, HttpResponse response, HttpRequest request)
 {
     Console.WriteLine("выполнение GetPerson");
@@ -144,6 +167,9 @@ async Task GetPerson(string? id, HttpResponse response, HttpRequest request)
     }
 }
 
+/// <summary>
+/// Delete client
+/// </summary>
 async Task DeletePerson(string? id, HttpResponse response, HttpRequest request)
 {
     Console.WriteLine("выполнение DeletePerson");
@@ -163,6 +189,9 @@ async Task DeletePerson(string? id, HttpResponse response, HttpRequest request)
     }
 }
 
+/// <summary>
+/// Create client
+/// </summary>
 async Task CreatePerson(HttpResponse response, HttpRequest request)
 {
     Console.WriteLine("выполнение CreatePerson");
@@ -190,6 +219,9 @@ async Task CreatePerson(HttpResponse response, HttpRequest request)
     }
 }
 
+/// <summary>
+/// Update client
+/// </summary>
 async Task UpdatePerson(HttpResponse response, HttpRequest request)
 {
     Console.WriteLine("выполнение UpdatePerson");
