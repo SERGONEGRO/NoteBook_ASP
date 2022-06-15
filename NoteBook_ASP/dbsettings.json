@@ -1,0 +1,5 @@
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=(localdb)\\MSSQLLocalDB;Database=NoteBook;Trusted_Connection=True;MultipleActiveResultSets=true"
+  }
+}
