@@ -34,7 +34,7 @@ namespace NoteBook_ASP.Data
             services.AddTransient<IAllPersons, PersonRepository>();
 
             //Позволяет работать с сессиями
-            //services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             //делает так, что для разных пользователей выдается разная корзина
             //services.AddScoped(sp => ShopCart.GetCart(sp));
@@ -67,12 +67,12 @@ namespace NoteBook_ASP.Data
             //});
 
             //добавляем маршруты
-            //app.UseMvc(routes =>
-            //{
-            //    routes.MapRoute(name: "default", template: "{controller=Home}/{action=Index}/{id?}");
-            //    routes.MapRoute(name: "categoryFilter", template: "Products/{action}/{category?}",
-            //        defaults: new { Controller = "Products", action = "List" });
-            //});
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(name: "default", template: "{controller=Home}/{action=Index}/{id?}");
+                routes.MapRoute(name: "categoryFilter", template: "Products/{action}/{category?}",
+                    defaults: new { Controller = "Products", action = "List" });
+            });
 
             using (var scope = app.ApplicationServices.CreateScope())
             {
