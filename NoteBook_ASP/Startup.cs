@@ -70,8 +70,8 @@ namespace NoteBook_ASP.Data
             app.UseMvc(routes =>
             {
                 routes.MapRoute(name: "default", template: "{controller=Home}/{action=Index}/{id?}");
-                routes.MapRoute(name: "categoryFilter", template: "Products/{action}/{category?}",
-                    defaults: new { Controller = "Products", action = "List" });
+                routes.MapRoute(name: "forPerson", template: "EditPerson/{action}/{id?}",
+                    defaults: new { Controller = "Persons", action = "Index" });
             });
 
             using (var scope = app.ApplicationServices.CreateScope())

@@ -1,12 +1,12 @@
 ﻿@model HomeViewModel
 
 <h1 class="test" >Все контакты:</h1>
-<a class="btn btn-warning contact__btn">Добавить новый контакт</a>
+<a class="btn btn-warning contact__btn" asp-controller="NewPerson" asp-action="Index">Добавить новый контакт</a>
 <div class="row mt-5 mb-2">
     @{
         foreach (Person person in Model.AllPerson)
         {
-            <!--вызов шаблона AllProducts -->
+            <!--вызов шаблона AllPerson -->
             @Html.Partial("AllPersons", person)
         }
     }

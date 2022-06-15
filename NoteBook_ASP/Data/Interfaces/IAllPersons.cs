@@ -8,5 +8,9 @@ namespace NoteBook_ASP.Data.Interfaces
     public interface IAllPersons
     {
         IEnumerable<Person> Persons { get; }
+        Person GetObjectPerson(int id);
+        void CreatePerson(Person person);
+        void UpdatePerson(Person person);
+        void DeletePerson(Person person);
     }
 }
