@@ -11,7 +11,7 @@ namespace NoteBook_ASP.Controllers
         /// </summary>
         private IAllPersons _AllPersons;
 
-        private Person _editPerson;
+        private Person _personToEdit;
 
         /// <summary>
         /// Конструктор
@@ -27,9 +27,21 @@ namespace NoteBook_ASP.Controllers
         [Route("EditPerson/Index/{id}")]
         public IActionResult Index(int id)
         {
-            _editPerson = _AllPersons.Persons.FirstOrDefault(x => x.Id == id);
+            _personToEdit = _AllPersons.Persons.FirstOrDefault(x => x.Id == id);
             ViewBag.Title = "Страница с клиентом";
-            return View(_editPerson);
+            return View(_personToEdit);
+        }
+
+        [HttpPost]
+        [Route("EditPerson/Confirm")]
+        [Route("EditPerson/Confirm/{id}")]
+        public IActionResult Confirm(Person person)
+        {
+
+            _AllPersons.UpdatePerson(person);
+
+            ViewBag.Message = "Запись успешно отредактирована!";
+            return View();
         }
 
     }

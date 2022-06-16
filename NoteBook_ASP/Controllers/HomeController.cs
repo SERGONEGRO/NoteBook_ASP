@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NoteBook_ASP.Data.Interfaces;
+using NoteBook_ASP.Models;
 using NoteBook_ASP.ViewModels;
 
 namespace NoteBook_ASP.Controllers
@@ -29,6 +30,19 @@ namespace NoteBook_ASP.Controllers
                 AllPerson = _personRep.Persons
             };
             return View(homePersons);
+        }
+
+        /// <summary>
+        /// Удаляет запись. Такое имя ,чтобы не добавлять еще одну View для подтверждения
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public IActionResult Confirm(int id)
+        {
+            _personRep.DeletePerson(id);
+
+            ViewBag.Message = "Запись успешно Удалена!";
+            return View();
         }
     }
 }

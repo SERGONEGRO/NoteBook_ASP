@@ -56,17 +56,17 @@ namespace NoteBook_ASP.Data.Repository
         /// Редактировать клиента
         /// </summary>
         /// <param name="order"></param>
-        public void UpdatePerson(Person person)
+        public void UpdatePerson(Person newPerson)
         {
-            Person newPerson = GetObjectPerson(person.Id);
-            newPerson.Name = person.Name;
-            newPerson.SurName = person.SurName;
-            newPerson.LastName = person.LastName;
-            newPerson.PhoneNumber = person.PhoneNumber;
-            newPerson.Address = person.Address;
-            newPerson.Description = person.Description;
+            Person OldPerson = GetObjectPerson(newPerson.Id);
+            OldPerson.Name = newPerson.Name;
+            OldPerson.SurName = newPerson.SurName;
+            OldPerson.LastName = newPerson.LastName;
+            OldPerson.PhoneNumber = newPerson.PhoneNumber;
+            OldPerson.Address = newPerson.Address;
+            OldPerson.Description = newPerson.Description;
             
-            appDBContent.Person.Update(newPerson);
+            appDBContent.Person.Update(OldPerson);
 
             appDBContent.SaveChanges();
         }
@@ -75,10 +75,9 @@ namespace NoteBook_ASP.Data.Repository
         /// Delete
         /// </summary>
         /// <param name="person"></param>
-        public void DeletePerson(Person person)
+        public void DeletePerson(int id)
         {
-            Person newPerson = GetObjectPerson(person.Id);
-            appDBContent.Person.Remove(newPerson);
+            appDBContent.Person.Remove(GetObjectPerson(id));
             appDBContent.SaveChanges();
         }
     }

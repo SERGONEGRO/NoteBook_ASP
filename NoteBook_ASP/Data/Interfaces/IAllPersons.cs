@@ -11,6 +11,6 @@ namespace NoteBook_ASP.Data.Interfaces
         Person GetObjectPerson(int id);
         void CreatePerson(Person person);
         void UpdatePerson(Person person);
-        void DeletePerson(Person person);
+        void DeletePerson(int id);
     }
 }

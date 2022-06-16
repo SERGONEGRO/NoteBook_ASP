@@ -1,13 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NoteBook_ASP.Data.Interfaces;
 using NoteBook_ASP.Models;
 
 namespace NoteBook_ASP.Controllers
 {
     public class NewPersonController: Controller
     {
-        private readonly Person _newPerson;
+        private IAllPersons _personRep;
 
-        public NewPersonController(){ }
+        public NewPersonController(IAllPersons allPersons){
+            _personRep = allPersons;
+        }
 
         /// <summary>
         /// новое окно
@@ -18,6 +21,16 @@ namespace NoteBook_ASP.Controllers
             return View();
         }
 
+        [HttpPost]
+        public IActionResult Confirm(Person newPerson)
+        {
+            if (newPerson != null)
+            {
+                _personRep.CreatePerson(newPerson);
+            }
+            ViewBag.Message = "Новая запись успешно создана!";
+            return View();
+        }
       
     }
 }
