@@ -1,0 +1,11 @@
+﻿@model Person
+
+<div class="row">
+    <h1>Редактировать запись</h1>
+        <form asp-action="Index" method="post" class="form-horizontal">
+            <!--вызов шаблона UpdatePerson -->
+            @Html.Partial("UpdatePerson", @Model)
+
+		<input class="btn btn-success" type="submit" value="Сохранить"/>
+     </form>
+</div>

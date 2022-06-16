@@ -1,0 +1,31 @@
+﻿body {
+    background-image: url(../img/img1.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+}
+
+.container {
+    color: chartreuse;
+    width: 95%;
+    margin: auto;
+    align-content: center;
+
+}
+.footer {
+    width: 100%;
+    background: #fcfcfc;
+}
+
+.contact__item {
+    outline: 2px solid red;
+    margin-bottom: 20px;
+}
+
+.contact__btns{
+    display: flex;
+}
+
+.contact__btn{
+    margin-left : 50px;
+}

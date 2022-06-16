@@ -1,0 +1,15 @@
+﻿<!-- Этот код подставляется в List.cshtml -->
+
+@model Person
+
+<div class="col-lg-12 contact__item">
+
+    <h3>фио: @Model.FullName</h3>
+    <p>@Model.PhoneNumber</p>
+    <p>@Model.Address</p>
+    <div class="contact__btns">
+        <a class="btn btn-warning contact__btn" asp-controller="EditPerson" asp-action="Index" asp-route-id="@Model.Id">Изменить</a>
+        <a class="btn btn-warning contact__btn" asp-controller="Home" asp-action="Complete" asp-route-id="@Model.Id">Удалить</a>
+    </div>
+    
+</div>
