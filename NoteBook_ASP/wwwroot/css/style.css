@@ -1,14 +1,16 @@
-﻿.body {
-
+﻿body {
+    background-image: url(../img/img1.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
 }
+
 .container {
     color: chartreuse;
     width: 95%;
     margin: auto;
     align-content: center;
-    background-image: url(../img/img1.jpg);
-    background-repeat: no-repeat;
-    background-size: cover;
+
 }
 .footer {
     width: 100%;

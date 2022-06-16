@@ -23,6 +23,11 @@ namespace NoteBook_ASP.Controllers
             _AllPersons = allPersons;
         }
 
+        /// <summary>
+        /// При открытии окна или при неверном вводе данных вызывается этот метод
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [Route("EditPerson/Index")]
         [Route("EditPerson/Index/{id}")]
         public IActionResult Index(int id)
@@ -32,14 +37,31 @@ namespace NoteBook_ASP.Controllers
             return View(_personToEdit);
         }
 
+        /// <summary>
+        /// Вызывается при нажатии на кнопку "сохранить"
+        /// </summary>
+        /// <param name="person"></param>
+        /// <returns></returns>
         [HttpPost]
-        [Route("EditPerson/Confirm")]
-        [Route("EditPerson/Confirm/{id}")]
-        public IActionResult Confirm(Person person)
+        [Route("EditPerson/Index")]
+        [Route("EditPerson/Index/{id}")]
+        public IActionResult Index(Person person)
         {
+            if (ModelState.IsValid)
+            {
+                _AllPersons.UpdatePerson(person);
+                return RedirectToAction("Complete");
+            }
+            return View(person);
 
-            _AllPersons.UpdatePerson(person);
+        }
 
+        /// <summary>
+        /// Если прошло успешно
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult Complete()
+        {
             ViewBag.Message = "Запись успешно отредактирована!";
             return View();
         }

@@ -59,16 +59,20 @@ namespace NoteBook_ASP.Data.Repository
         public void UpdatePerson(Person newPerson)
         {
             Person OldPerson = GetObjectPerson(newPerson.Id);
-            OldPerson.Name = newPerson.Name;
-            OldPerson.SurName = newPerson.SurName;
-            OldPerson.LastName = newPerson.LastName;
-            OldPerson.PhoneNumber = newPerson.PhoneNumber;
-            OldPerson.Address = newPerson.Address;
-            OldPerson.Description = newPerson.Description;
-            
-            appDBContent.Person.Update(OldPerson);
+            if(OldPerson != null)
+            {
+                OldPerson.Name = newPerson.Name;
+                OldPerson.SurName = newPerson.SurName;
+                OldPerson.LastName = newPerson.LastName;
+                OldPerson.PhoneNumber = newPerson.PhoneNumber;
+                OldPerson.Address = newPerson.Address;
+                OldPerson.Description = newPerson.Description;
 
-            appDBContent.SaveChanges();
+                appDBContent.Person.Update(OldPerson);
+
+                appDBContent.SaveChanges();
+            }
+            
         }
 
         /// <summary>

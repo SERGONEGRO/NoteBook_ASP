@@ -4,11 +4,12 @@ using NoteBook_ASP.Models;
 
 namespace NoteBook_ASP.Controllers
 {
-    public class NewPersonController: Controller
+    public class NewPersonController : Controller
     {
         private IAllPersons _personRep;
 
-        public NewPersonController(IAllPersons allPersons){
+        public NewPersonController(IAllPersons allPersons)
+        {
             _personRep = allPersons;
         }
 
@@ -21,16 +22,32 @@ namespace NoteBook_ASP.Controllers
             return View();
         }
 
+        /// <summary>
+        /// при нажатии на СОХРАНИТЬ
+        /// </summary>
+        /// <param name="newPerson"></param>
+        /// <returns></returns>
         [HttpPost]
-        public IActionResult Confirm(Person newPerson)
+        public IActionResult Index(Person newPerson)
         {
-            if (newPerson != null)
+            if (ModelState.IsValid)
             {
                 _personRep.CreatePerson(newPerson);
+                return RedirectToAction("Complete");
             }
+            return View(newPerson);
+        }
+
+
+        /// <summary>
+        /// Если успешно
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult Complete()
+        {
             ViewBag.Message = "Новая запись успешно создана!";
             return View();
+
         }
-      
     }
 }

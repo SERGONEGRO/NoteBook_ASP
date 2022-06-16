@@ -25,9 +25,6 @@
 
   <ItemGroup>
     <None Include="wwwroot\css\style.css" />
-    <None Include="wwwroot\html\index.html" />
-    <None Include="wwwroot\html\person_edit.html" />
-    <None Include="wwwroot\html\person_new.html" />
     <None Include="wwwroot\img\img1.jpg" />
   </ItemGroup>
 

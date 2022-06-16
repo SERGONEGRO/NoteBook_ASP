@@ -23,6 +23,10 @@ namespace NoteBook_ASP.Controllers
             _personRep = personRep;
         }
 
+        /// <summary>
+        /// показывает всех клиентов
+        /// </summary>
+        /// <returns></returns>
         public ViewResult Index()
         {
             var homePersons = new HomeViewModel
@@ -37,7 +41,7 @@ namespace NoteBook_ASP.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public IActionResult Confirm(int id)
+        public IActionResult Complete(int id)
         {
             _personRep.DeletePerson(id);
 
